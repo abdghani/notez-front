@@ -1,0 +1,118 @@
+.App {
+  text-align: center;
+}
+
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+
+.Spinner{
+  width: 100px;
+	height: 100px;
+	background-color: red;
+	
+	position: absolute;
+	top:0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+  	
+	margin: auto;
+}
+
+.done {
+  font-weight: 200 !important;
+  color: gray !important;
+  /* text-decoration: line-through !important; */
+}
+
+@media all and (min-width:481px) {
+  .backbutton { display:none }
+  .mycalendardesk { display:initial }
+  .mycalendarmob { display:none }
+}
+
+@media all and (max-width:481px) {
+  .backbutton { display:initial }
+  .mycalendardesk { display:none }
+  .mycalendarmob { display:initial }
+}
+
+/* .react-date-picker{
+  width: 93% !important;
+} */
+
+/* .react-date-picker__calendar{
+  box-shadow: 0 30px 40px 0 rgba(16, 36, 94, 0.2);
+} */
+
+.react-tagsinput-remove{
+  color: antiquewhite !important;
+}
+
+.react-calendar{
+  border: 0px !important;
+  width: 100% !important;
+  text-align: center;
+}
+.react-calendar__viewContainer{
+  border: 0.2px solid #e8dbdb !important
+}
+.react-calendar__navigation{
+  border: 0.2px solid #e8dbdb !important;
+  margin-bottom: 0px !important;
+}
+.react-component-cal {
+  border: 0px;
+  margin:0 auto !important;
+  /* box-shadow: 0 30px 40px 0 #e8dbdb; */
+}
+
+.react-date-picker__wrapper{
+  border-radius: 5px !important;
+  border: 0.1px solid #e8dbdb !important;
+  height: 40px !important;
+}
+.react-date-picker{
+  border-radius: 5px !important;
+}
+
+.pointer{
+  cursor: pointer;
+}
+
+.react-daterange-picker__wrapper{
+  padding: 10px !important;
+}
