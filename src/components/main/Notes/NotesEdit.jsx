@@ -8,12 +8,10 @@ import { Editor } from '@tinymce/tinymce-react';
 import TagsInput from 'react-tagsinput'
 
 import toastr from '../../shared/toastr';
-import { tinyinit }from '../../shared/util'
+import { tinyinit } from '../../shared/util'
 
 
 const NotesEdit = (props) => {
-
-
     const [noteTitle, setNoteTitle] = useState('');
     const [noteContent, setNoteContent] = useState('');
     const [hasHeader, setHasHeader] = useState(true);
@@ -21,11 +19,11 @@ const NotesEdit = (props) => {
     const [headerImage, setHeaderImage] = useState('');
     const [tags, setTags] = useState([])
     const [noteId, setNoteId] = useState('');
-    const { loading : loadingNote, data} =  useQuery(fetchNoteQuery, {
-        variables: { id:  props.match.params.note_id }
+    const { loading: loadingNote, data } = useQuery(fetchNoteQuery, {
+        variables: { id: props.match.params.note_id }
     })
     useEffect(() => {
-        if(data!= undefined){
+        if (data != undefined) {
             setTags(data.fetchNote.tags)
             setNoteTitle(data.fetchNote.title)
             setNoteContent(data.fetchNote.content)
@@ -34,12 +32,12 @@ const NotesEdit = (props) => {
             setHeaderImage(data.fetchNote.header_image)
             setHeaderContent(data.fetchNote.header_content)
         }
-    },[!loadingNote]);
+    }, [!loadingNote]);
 
     useEffect(() => {
         let id = setInterval(() => {
-            if(noteTitle.length != 0 && noteContent.length != 0){
-                updateNote();   
+            if (noteTitle.length != 0 && noteContent.length != 0) {
+                updateNote();
             }
         }, 60000);
         return () => clearInterval(id);
@@ -47,15 +45,17 @@ const NotesEdit = (props) => {
 
     const [updateNote, { loading, error: mutationError }] = useMutation(updateNoteQuery, {
         variables: {
-            id: noteId,
-            title: noteTitle,
-            content: noteContent,
-            has_header: hasHeader,
-            header_image: headerImage,
-            header_content: headerContent,
-            tags: tags
+            input: {
+                id: noteId,
+                title: noteTitle,
+                content: noteContent,
+                has_header: hasHeader,
+                header_image: headerImage,
+                header_content: headerContent,
+                tags: tags
+            }
         },
-        update(_, result){
+        update(_, result) {
             const updatedNote = result.data.reformNote;
             setNoteTitle(updatedNote.title);
             setNoteContent(updatedNote.content);
@@ -63,17 +63,17 @@ const NotesEdit = (props) => {
         }
     })
 
-    if(!loadingNote && data == undefined){
+    if (!loadingNote && data == undefined) {
         props.history.push('/notes');
     }
     const validateUpdateNote = () => {
-        if(noteTitle.length == 0 || noteContent.length == 0){
+        if (noteTitle.length == 0 || noteContent.length == 0) {
             toastr.error("All fields are necessary");
-        }else{
+        } else {
             updateNote();
         }
     }
-    if(mutationError){
+    if (mutationError) {
         toastr.error(`Error updating`)
     }
     const removeTag = (e) => {
@@ -87,17 +87,17 @@ const NotesEdit = (props) => {
                         {
                             data != undefined ? (
                                 <div>
-                                    
+
                                     <div className="field">
                                         <label className="label is-large">Title</label>
                                         <div className="control ">
-                                            <input className="input is-large" 
-                                                    type="text" placeholder="Enter a Title" 
-                                                    value={noteTitle} 
-                                                    onChange={e => setNoteTitle(e.target.value)}/>
+                                            <input className="input is-large"
+                                                type="text" placeholder="Enter a Title"
+                                                value={noteTitle}
+                                                onChange={e => setNoteTitle(e.target.value)} />
                                         </div>
                                     </div>
-                                    <div  className="field">
+                                    <div className="field">
                                         <label className="label is-large">Content</label>
                                         <Editor
                                             apiKey="qjv3x97fehnsfdfbzeuxtqbu6c58azrkjtqf15aqbmfqmcs5"
@@ -113,7 +113,7 @@ const NotesEdit = (props) => {
                                     </div>
 
                                     <label className="checkbox mg-t-10">
-                                        <input type="checkbox" checked={hasHeader} onChange={e => setHasHeader(!hasHeader)}/>
+                                        <input type="checkbox" checked={hasHeader} onChange={e => setHasHeader(!hasHeader)} />
                                         <span className="mg-l-10">Contains Header{hasHeader}</span>
                                     </label>
 
@@ -133,7 +133,7 @@ const NotesEdit = (props) => {
                                         </p>
                                         <div className="field">
                                             <div className="control">
-                                                <input className="input is-primary" value={headerImage} type="text" placeholder="Header Image Url" onChange={e => setHeaderImage(e.target.value)}/>
+                                                <input className="input is-primary" value={headerImage} type="text" placeholder="Header Image Url" onChange={e => setHeaderImage(e.target.value)} />
                                             </div>
                                         </div>
                                     </div>
@@ -148,20 +148,20 @@ const NotesEdit = (props) => {
                                             </Link>
                                         </p>
                                     </div>
-                                    
+
                                 </div>
-                            ): (
+                            ) : (
                                 <div>
                                     No Note
                                 </div>
                             )
                         }
                     </div>
-                ): (<Loading />)
+                ) : (<Loading />)
             }
         </div>
     )
-    
+
 }
 
 export default withRouter(NotesEdit);

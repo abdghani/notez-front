@@ -5,19 +5,18 @@ import { useQuery, useMutation } from '@apollo/react-hooks';
 export const TodoContext = createContext();
 export const TodoContextProvider = (props) => {
     let today = new Date()
-    const [ date, setDate ] = useState(new Date(today.getFullYear(), today.getMonth(), today.getDate(), 0,0,0))
-    const { loading: loadingTodos, data: todolist } =  useQuery(fetchTodoQuery)
-    const [ rawtodos, setRawTodos ] = useState([]);
-    const [ todos, setTodos ] = useState([]);
-    const [ addaTodo, { loading: loadingAdd, error: mutationAddError }] = useMutation(addTodoQuery);
-    const [ updateTodo, { loading: loadingUpdate, error: mutationUpdateError }] = useMutation(updateTodoQuery);
+    const { loading: loadingTodos, data: todolist } = useQuery(fetchTodoQuery)
+    const [rawtodos, setRawTodos] = useState([]);
+    const [todos, setTodos] = useState([]);
+    const [addaTodo] = useMutation(addTodoQuery);
+    const [updateTodo] = useMutation(updateTodoQuery);
 
     const changeTodo = (_todo) => {
         let status;
         let temporaryTodos = [...rawtodos];
-        let updateDate = new Date(); 
+        let updateDate = new Date();
         temporaryTodos.map(todo => {
-            if(_todo.id == todo.id){
+            if (_todo.id == todo.id) {
                 todo.status = !todo.status;
                 todo.updatedAt = updateDate;
                 status = todo.status;
@@ -27,19 +26,22 @@ export const TodoContextProvider = (props) => {
         parseTodos(temporaryTodos);
         updateTodo({
             variables: {
-                "id": _todo.id, 
-                "status": status, 
-                "updatedAt": updateDate
+                input: {
+                    "id": _todo.id,
+                    "status": status,
+                    "updatedAt": updateDate
+                }
             }
         })
     }
 
-    const addTodo = (_todo) => {
-        if (_todo.length){
+    const addTodo = (content) => {
+        if (content.length) {
+            const tdate = new Date(today.getFullYear(), today.getMonth(), today.getDate(), 0, 0, 0)
             addaTodo({
-                variables: {"content": _todo,"tdate": date},
-                update(_, result){
-                    const updatedTodoList =  [...rawtodos, result.data.createTodo];
+                variables: { input: { content, tdate } },
+                update(_, result) {
+                    const updatedTodoList = [...rawtodos, result.data.createTodo];
                     setRawTodos(updatedTodoList);
                     parseTodos(updatedTodoList)
                 }
@@ -50,12 +52,12 @@ export const TodoContextProvider = (props) => {
     const parseTodos = (todos) => {
         let todolist = {}
         todos.forEach(todo => {
-            if (todolist[todo.createdAt] == undefined){
+            if (todolist[todo.createdAt] == undefined) {
                 todolist[todo.createdAt] = {
-                    'date': new Date(parseInt(todo.createdAt,10)),
+                    'date': new Date(parseInt(todo.createdAt, 10)),
                     'todos': [todo]
                 }
-            }else{
+            } else {
                 todolist[todo.createdAt]['todos'].push(todo)
             }
         })
@@ -63,7 +65,7 @@ export const TodoContextProvider = (props) => {
     }
 
     useEffect(() => {
-        if(todolist != undefined){
+        if (todolist != undefined) {
             setRawTodos(todolist.fetchTodo)
             parseTodos(todolist.fetchTodo)
         }
@@ -71,11 +73,11 @@ export const TodoContextProvider = (props) => {
 
     return (
         <TodoContext.Provider value={{
-                loadingTodos, 
-                todos, 
-                addTodo,
-                changeTodo
-            }}>
+            loadingTodos,
+            todos,
+            addTodo,
+            changeTodo
+        }}>
             {props.children}
         </TodoContext.Provider>
     )

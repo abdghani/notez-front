@@ -1,20 +1,17 @@
 import gql from 'graphql-tag';
 
 export const addTodoQuery = gql`
-    mutation createtodo(
-        $content: String!
-        $tdate: String!
-    ){
-        createTodo(
-            content: $content
-            tdate: $tdate
-        ){
+    mutation($input: CreateTodoInput) {
+        createTodo(createTodoInput: $input) {
             id
             content
-            createdAt
+            status
             updatedAt
+            createdAt
+            userSub
         }
     }
+  
 `
 
 export const fetchTodoQuery = gql`
@@ -31,16 +28,8 @@ export const fetchTodoQuery = gql`
 `
 
 export const updateTodoQuery = gql`
-    mutation updatetodo(
-        $id: ID!
-        $status: Boolean!
-        $updatedAt: String!
-    ){
-        updateTodo(
-            id: $id
-            status: $status
-            updatedAt: $updatedAt
-        ){
+    mutation ($input: UpdateTodoInput){
+        updateTodo(updateTodoInput: $input){
             id
             content
             status

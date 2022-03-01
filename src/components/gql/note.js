@@ -40,49 +40,15 @@ export const deleteNotesQuery = gql`
 `
 
 export const addNotesQuery = gql`
-    mutation createNote(
-        $title:String!
-        $content:String!
-        $has_header:Boolean
-        $header_image:String!
-        $header_content:String!
-        $tags: [String!]
-    ){
-        createNote(
-            addNote : {
-                title: $title
-                content: $content
-                has_header: $has_header
-                header_image: $header_image
-                header_content: $header_content
-                tags: $tags
-            }
-        ){
+    mutation createNote($input : AddNote){
+        createNote(addNote : $input){
             id
         }
     }
 `
 export const updateNoteQuery = gql`
-    mutation updateNote(
-        $id : ID!
-        $title : String!
-        $content : String!
-        $has_header: Boolean
-        $header_image: String!
-        $header_content: String!
-        $tags: [String!]
-    ){
-        reformNote(
-            updateNote : {
-                id: $id
-                title: $title
-                content: $content
-                has_header: $has_header
-                header_image: $header_image
-                header_content: $header_content
-                tags: $tags
-            }
-        ){
+    mutation updateNote($input : UpdateNote){
+        reformNote(updateNote : $input){
             id
             title
             content
